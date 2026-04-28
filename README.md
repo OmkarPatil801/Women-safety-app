@@ -1,17 +1,24 @@
-# women_safety_app
+# Women Safety App
 
-A new Flutter project.
+A smart mobile application designed to enhance women's safety using real-time location tracking, emergency alerts, and risk zone awareness.
 
-## Getting Started
+## 🚀 Features
+- SOS emergency alert with live location
+- Google Maps integration
+- Risk zone visualization
+- Offline safety features (SMS alert system)
 
-This project is a starting point for a Flutter application.
+## 📱 Tech Stack
+- Flutter
+- Google Maps API
+- Geolocation services
 
-A few resources to get you started if this is your first Flutter project:
+## 📌 Description
+This app helps users identify unsafe areas, send emergency alerts, and navigate safely using real-time and offline features.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## 🛠️ Getting Started
+This project is a Flutter application.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Helpful resources:
+- https://docs.flutter.dev/get-started/learn-flutter
+- https://docs.flutter.dev/get-started/codelab
