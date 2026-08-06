@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'map_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'screens/report_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(SafetyApp());
 }
 
@@ -455,6 +463,20 @@ class _HomeScreenState extends State<HomeScreen> {
               desc: "Simulate an incoming call to escape danger",
               isLoggedIn: isLoggedIn,
               onTap: () => _onLockedFeatureTap("Fake Call"),
+            ),
+            _featureTile(
+              icon: Icons.report,
+              label: "Incident Reports",
+              desc: "Report unsafe incidents in your area",
+              isLoggedIn: isLoggedIn,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReportsScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 36),

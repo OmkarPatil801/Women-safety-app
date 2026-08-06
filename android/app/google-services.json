@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700172712421",
+    "project_id": "vigilo-6d61a",
+    "storage_bucket": "vigilo-6d61a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700172712421:android:c3ede5c26cd993b170570c",
+        "android_client_info": {
+          "package_name": "com.example.women_safety_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyVyQ7GZg5q26Gycc_m37UxPy4voytUuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
