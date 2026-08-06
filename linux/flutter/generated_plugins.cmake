@@ -3,18 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
   sqlite3_flutter_libs
-=======
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
   url_launcher_linux
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
-<<<<<<< HEAD
   jni
-=======
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

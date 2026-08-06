@@ -34,19 +34,17 @@ dependencies:
   google_maps_flutter: ^2.5.0
   geolocator: ^10.0.0
   url_launcher: ^6.2.5
-  firebase_core: ^2.0.0
-  cloud_firestore: ^4.0.0
+  firebase_core: ^4.13.0
+  cloud_firestore: ^6.8.0
+  firebase_auth: ^6.5.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-<<<<<<< HEAD
   path_provider: ^2.1.1
   drift: ^2.20.0
   sqlite3_flutter_libs: ^0.5.24
   path: ^1.9.0
-=======
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
 
 dev_dependencies:
   flutter_test:
@@ -58,11 +56,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-<<<<<<< HEAD
   build_runner: ^2.4.13
   drift_dev: ^2.20.0
-=======
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

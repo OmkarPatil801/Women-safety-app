@@ -1,49 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
-<<<<<<< HEAD
-import 'database/database.dart';
-import 'repositories/contact_repository.dart';
-import 'screens/emergency_contacts_screen.dart';
-import 'screens/map_screen.dart';
+  import 'database/database.dart';
+  import 'repositories/contact_repository.dart';
+  import 'screens/emergency_contacts_screen.dart';
+  import 'screens/map_screen.dart';
+  import 'services/auth_service.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseService.instance.openDatabase();
-=======
-import 'map_screen.dart';
-
-void main() {
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
-  runApp(SafetyApp());
-}
-
-// ─── Simple in-memory auth state ─────────────────────────────────────────────
-class AuthState {
-  static String? loggedInUser;
-  static String? loggedInName;
-  static final Map<String, Map<String, String>> _users = {};
-
-  static bool login(String phone, String password) {
-    if (_users.containsKey(phone) && _users[phone]!['password'] == password) {
-      loggedInUser = phone;
-      loggedInName = _users[phone]!['name'];
-      return true;
-    }
-    return false;
+  void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    await DatabaseService.instance.openDatabase();
+    runApp(SafetyApp());
   }
 
-  static bool register(String name, String phone, String password) {
-    if (_users.containsKey(phone)) return false;
-    _users[phone] = {'password': password, 'name': name};
-    loggedInUser = phone;
-    loggedInName = name;
-    return true;
-  }
+// ─── Auth Gate — persistent login via Firebase Auth stream ────────────────────
+// Firebase Auth automatically persists the user session to disk.
+// AuthGate listens to authStateChanges() and passes the auth state
+// down to HomeScreen so it can render logged-in vs logged-out UI.
+class AuthGate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // While Firebase is still determining the auth state, show a
+        // splash/loading indicator so the user doesn't see a flash of
+        // the logged-out UI.
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            backgroundColor: Color(0xFF1A0A0A),
+            body: Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFC0392B),
+              ),
+            ),
+          );
+        }
 
-  static void logout() {
-    loggedInUser = null;
-    loggedInName = null;
+        // Whether or not the user is logged in, HomeScreen handles both
+        // states. We just pass the Firebase User down.
+        return HomeScreen(firebaseUser: snapshot.data);
+      },
+    );
   }
 }
 
@@ -62,29 +63,51 @@ class SafetyApp extends StatelessWidget {
           secondary: const Color(0xFFF1948A),
         ),
       ),
-      home: HomeScreen(),
+      home: AuthGate(),
     );
   }
 }
 
 // ─── HOME SCREEN ──────────────────────────────────────────────────────────────
 class HomeScreen extends StatefulWidget {
+  final User? firebaseUser;
+  const HomeScreen({super.key, this.firebaseUser});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-<<<<<<< HEAD
   final ContactRepository _contactRepository = DriftContactRepository();
+  final AuthService _authService = AuthService();
+  String? _userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.firebaseUser?.uid != widget.firebaseUser?.uid) {
+      _loadUserName();
+    }
+  }
+
+  void _loadUserName() {
+    // displayName is set via updateDisplayName() during registration.
+    // It's cached locally by Firebase Auth, so no network call needed.
+    // Firebase can return an empty string instead of null, so we
+    // normalise that to null so the ?? fallbacks work everywhere.
+    final raw = widget.firebaseUser?.displayName;
+    _userName = (raw != null && raw.isNotEmpty) ? raw : null;
+  }
 
   // ════════════════════════════════════════════════════════
   // 🔥 SOS FUNCTION — sends only to contacts marked as Primary
   // Emergency Contacts, read from ContactRepository (Drift).
-=======
-
-  // ════════════════════════════════════════════════════════
-  // 🔥 ORIGINAL SOS FUNCTION — COMPLETELY UNCHANGED
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
   // ════════════════════════════════════════════════════════
   Future<void> sendSOS() async {
     try {
@@ -108,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
       double lat = position.latitude;
       double lng = position.longitude;
 
-<<<<<<< HEAD
       // 3. Load Primary Emergency Contacts from the local database
       final contacts = await _contactRepository.getPrimaryContacts();
 
@@ -137,20 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       // 6. Open SMS app
-=======
-      // 3. Create SOS message
-      String message =
-          "🚨 SOS! I need help.\nMy Location: https://maps.google.com/?q=$lat,$lng";
-
-      // 👉 Replace with your phone number
-      final Uri smsUri = Uri(
-        scheme: 'sms',
-        path: '7755922469',
-        queryParameters: {'body': message},
-      );
-      
-      // 4. Open SMS app
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
       await launchUrl(smsUri);
 
     } catch (e) {
@@ -159,17 +167,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   // ════════════════════════════════════════════════════════
 
-  void _goToLogin() async {
-    await Navigator.push(
+  void _goToLogin() {
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => LoginScreen()),
     );
-    setState(() {}); // refresh UI after login/register
+    // No setState needed — AuthGate's StreamBuilder rebuilds
+    // HomeScreen automatically when auth state changes.
   }
   
-  void _logout() {
-    AuthState.logout();
-    setState(() {});
+  void _logout() async {
+    await _authService.logout();
+    // AuthGate will rebuild HomeScreen with firebaseUser = null
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Signed out successfully'),
@@ -179,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onLockedFeatureTap(String featureName) {
-    if (AuthState.loggedInUser == null) {
+    if (widget.firebaseUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Login to use $featureName'),
@@ -204,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoggedIn = AuthState.loggedInUser != null;
+    final bool isLoggedIn = widget.firebaseUser != null;
 
     return Scaffold(
       backgroundColor: const Color(0xFF1A0A0A),
@@ -222,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: _logout,
               icon: Icon(Icons.logout, color: Colors.grey, size: 18),
               label: Text(
-                AuthState.loggedInName ?? 'User',
+                _userName ?? 'User',
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
             )
@@ -405,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // ── Auth / User section ──────────────────────────
             if (!isLoggedIn)
-              _AuthCard(onAuthSuccess: () => setState(() {}))
+              _AuthCard(onAuthSuccess: () {})
             else
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -422,7 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: 20,
                       backgroundColor: const Color(0xFFC0392B),
                       child: Text(
-                        (AuthState.loggedInName ?? 'U')[0].toUpperCase(),
+                        (_userName != null && _userName!.isNotEmpty ? _userName![0] : 'U').toUpperCase(),
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
@@ -434,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AuthState.loggedInName ?? 'User',
+                            _userName ?? 'User',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -483,7 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label: "Emergency Contacts",
               desc: "Add & manage your trusted contacts",
               isLoggedIn: isLoggedIn,
-<<<<<<< HEAD
               // TODO(dev-mode): login check temporarily removed so
               // ContactRepository/Drift can be tested without signing in.
               // Restore the `if (isLoggedIn) { ... } else { _onLockedFeatureTap(...) }`
@@ -496,9 +505,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-=======
-              onTap: () => _onLockedFeatureTap("Emergency Contacts"),
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
             ),
             _featureTile(
               icon: Icons.map,
@@ -641,6 +647,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _showLogin = true;
+  bool _loading = false;
 
   // Login
   final _loginPhone = TextEditingController();
@@ -652,22 +659,39 @@ class _LoginScreenState extends State<LoginScreen> {
   final _regPass = TextEditingController();
 
   String? _errorMsg;
+  final AuthService _authService = AuthService();
 
-  void _doLogin() {
+  void _doLogin() async {
     final phone = _loginPhone.text.trim();
     final pass = _loginPass.text.trim();
     if (phone.isEmpty || pass.isEmpty) {
       setState(() => _errorMsg = 'Please fill in all fields.');
       return;
     }
-    if (AuthState.login(phone, pass)) {
+
+    setState(() { _loading = true; _errorMsg = null; });
+
+    final error = await _authService.login(phone: phone, password: pass);
+
+    if (!mounted) return;
+    setState(() => _loading = false);
+
+    if (error == null) {
+      // Success — pop back; AuthGate will rebuild HomeScreen
+      // with the new Firebase user automatically.
       Navigator.pop(context);
     } else {
-      setState(() => _errorMsg = 'Invalid phone or password.');
+      setState(() => _errorMsg = error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: const Color(0xFFC0392B),
+        ),
+      );
     }
   }
 
-  void _doRegister() {
+  void _doRegister() async {
     final name = _regName.text.trim();
     final phone = _regPhone.text.trim();
     final pass = _regPass.text.trim();
@@ -680,10 +704,30 @@ class _LoginScreenState extends State<LoginScreen> {
           () => _errorMsg = 'Password must be at least 6 characters.');
       return;
     }
-    if (AuthState.register(name, phone, pass)) {
+
+    setState(() { _loading = true; _errorMsg = null; });
+
+    final error = await _authService.register(
+      name: name,
+      phone: phone,
+      password: pass,
+    );
+
+    if (!mounted) return;
+    setState(() => _loading = false);
+
+    if (error == null) {
+      // Success — pop back; AuthGate will rebuild HomeScreen
+      // with the new Firebase user automatically.
       Navigator.pop(context);
     } else {
-      setState(() => _errorMsg = 'Phone number already registered.');
+      setState(() => _errorMsg = error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: const Color(0xFFC0392B),
+        ),
+      );
     }
   }
 
@@ -781,25 +825,37 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed:
-                                _showLogin ? _doLogin : _doRegister,
+                            onPressed: _loading
+                                ? null
+                                : (_showLogin ? _doLogin : _doRegister),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFC0392B),
                               foregroundColor: Colors.white,
+                              disabledBackgroundColor:
+                                  const Color(0xFFC0392B).withOpacity(0.5),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 14),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(10)),
                             ),
-                            child: Text(
-                              _showLogin
-                                  ? "Sign In →"
-                                  : "Create Account →",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                            child: _loading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    _showLogin
+                                        ? "Sign In →"
+                                        : "Create Account →",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 12),
