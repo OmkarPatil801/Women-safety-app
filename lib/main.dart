@@ -8,6 +8,7 @@ import 'repositories/contact_repository.dart';
 import 'screens/emergency_contacts_screen.dart';
 import 'screens/fake_call/fake_call_screen.dart';
 import 'screens/map_screen.dart';
+import 'screens/report_screen.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -499,32 +500,43 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            // TODO(dev-mode):
+            // Restore authentication gate after Firebase Authentication is
+            // fully configured.
             _featureTile(
               icon: Icons.map,
               label: "Safety Map",
               desc: "View risk zones and safe routes",
               isLoggedIn: isLoggedIn,
               onTap: () {
-                if (isLoggedIn) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => MapScreen()));
-                } else {
-                  _onLockedFeatureTap("Safety Map");
-                }
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => MapScreen()));
               },
             ),
+            // TODO(dev-mode):
+            // Restore authentication gate after Firebase Authentication is
+            // fully configured.
             _featureTile(
               icon: Icons.phone_in_talk,
               label: "Fake Call",
               desc: "Simulate an incoming call to escape danger",
               isLoggedIn: isLoggedIn,
               onTap: () {
-                if (isLoggedIn) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => FakeCallScreen()));
-                } else {
-                  _onLockedFeatureTap("Fake Call");
-                }
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => FakeCallScreen()));
+              },
+            ),
+            // TODO(dev-mode):
+            // Restore authentication gate after Firebase Authentication is
+            // fully configured.
+            _featureTile(
+              icon: Icons.report,
+              label: "📝 Incident Reports",
+              desc: "Report incidents & view previous reports",
+              isLoggedIn: isLoggedIn,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ReportsScreen()));
               },
             ),
 

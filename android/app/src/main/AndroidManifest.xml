@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- Required by the `vibration` package for the Fake Call feature -->
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- Required by `image_picker` for the Incident Report camera option -->
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:label="women_safety_app"
