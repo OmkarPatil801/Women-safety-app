@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+<<<<<<< HEAD
 import 'database/database.dart';
 import 'repositories/contact_repository.dart';
 import 'screens/emergency_contacts_screen.dart';
@@ -9,6 +10,11 @@ import 'screens/map_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService.instance.openDatabase();
+=======
+import 'map_screen.dart';
+
+void main() {
+>>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
   runApp(SafetyApp());
 }
 
@@ -68,11 +74,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+<<<<<<< HEAD
   final ContactRepository _contactRepository = DriftContactRepository();
 
   // ════════════════════════════════════════════════════════
   // 🔥 SOS FUNCTION — sends only to contacts marked as Primary
   // Emergency Contacts, read from ContactRepository (Drift).
+=======
+
+  // ════════════════════════════════════════════════════════
+  // 🔥 ORIGINAL SOS FUNCTION — COMPLETELY UNCHANGED
+>>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
   // ════════════════════════════════════════════════════════
   Future<void> sendSOS() async {
     try {
@@ -96,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
       double lat = position.latitude;
       double lng = position.longitude;
 
+<<<<<<< HEAD
       // 3. Load Primary Emergency Contacts from the local database
       final contacts = await _contactRepository.getPrimaryContacts();
 
@@ -124,6 +137,20 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       // 6. Open SMS app
+=======
+      // 3. Create SOS message
+      String message =
+          "🚨 SOS! I need help.\nMy Location: https://maps.google.com/?q=$lat,$lng";
+
+      // 👉 Replace with your phone number
+      final Uri smsUri = Uri(
+        scheme: 'sms',
+        path: '7755922469',
+        queryParameters: {'body': message},
+      );
+      
+      // 4. Open SMS app
+>>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
       await launchUrl(smsUri);
 
     } catch (e) {
@@ -456,6 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
               label: "Emergency Contacts",
               desc: "Add & manage your trusted contacts",
               isLoggedIn: isLoggedIn,
+<<<<<<< HEAD
               // TODO(dev-mode): login check temporarily removed so
               // ContactRepository/Drift can be tested without signing in.
               // Restore the `if (isLoggedIn) { ... } else { _onLockedFeatureTap(...) }`
@@ -468,6 +496,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
+=======
+              onTap: () => _onLockedFeatureTap("Emergency Contacts"),
+>>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
             ),
             _featureTile(
               icon: Icons.map,
