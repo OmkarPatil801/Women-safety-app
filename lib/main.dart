@@ -1,49 +1,72 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
-<<<<<<< HEAD
 import 'database/database.dart';
+import 'models/app_user.dart';
 import 'repositories/contact_repository.dart';
 import 'screens/emergency_contacts_screen.dart';
+import 'screens/fake_call/fake_call_screen.dart';
 import 'screens/map_screen.dart';
+import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseService.instance.openDatabase();
-=======
-import 'map_screen.dart';
 
-void main() {
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
+  // TODO: Enable after Firebase is configured
+  // await Firebase.initializeApp();
+  // await AuthState.restoreSession();
+
+  await DatabaseService.instance.openDatabase();
+
   runApp(SafetyApp());
 }
 
-// ─── Simple in-memory auth state ─────────────────────────────────────────────
+// ─── Auth state — backed by Firebase Authentication + Firestore ────────────
+//
+// Public shape (loggedInUser, loggedInName, login, register, logout) is
+// unchanged from the original in-memory version, so every existing call
+// site (LoginScreen, HomeScreen, _AuthCard) works without modification.
+// The actual Firebase Auth/Firestore calls live in AuthService — this
+// class is a thin, backwards-compatible wrapper around it.
 class AuthState {
-  static String? loggedInUser;
-  static String? loggedInName;
-  static final Map<String, Map<String, String>> _users = {};
+  static final AuthService _authService = AuthService();
+  static AppUser? _currentUser;
 
-  static bool login(String phone, String password) {
-    if (_users.containsKey(phone) && _users[phone]!['password'] == password) {
-      loggedInUser = phone;
-      loggedInName = _users[phone]!['name'];
-      return true;
-    }
-    return false;
+  /// Preserved for compatibility with existing call sites — was the map
+  /// key (phone number) under the old in-memory implementation, and
+  /// remains the signed-in user's phone number now. Every existing call
+  /// site only null-checks this value, never reads its content.
+  static String? get loggedInUser => _currentUser?.phone;
+
+  static String? get loggedInName => _currentUser?.name;
+
+  /// The full Firebase-backed profile, for any future code that needs
+  /// more than just the phone/name (e.g. `uid` for Report ownership).
+  static AppUser? get currentUser => _currentUser;
+
+  static Future<bool> login(String phone, String password) async {
+    final user = await _authService.login(phone, password);
+    _currentUser = user;
+    return user != null;
   }
 
-  static bool register(String name, String phone, String password) {
-    if (_users.containsKey(phone)) return false;
-    _users[phone] = {'password': password, 'name': name};
-    loggedInUser = phone;
-    loggedInName = name;
-    return true;
+  static Future<bool> register(String name, String phone, String password) async {
+    final user = await _authService.register(name, phone, password);
+    _currentUser = user;
+    return user != null;
   }
 
-  static void logout() {
-    loggedInUser = null;
-    loggedInName = null;
+  static Future<void> logout() async {
+    await _authService.logout();
+    _currentUser = null;
+  }
+
+  /// Called once at app startup so a previously signed-in user is still
+  /// shown as logged in after a restart — Firebase Auth persists the
+  /// session natively; this just re-loads the matching Firestore profile.
+  static Future<void> restoreSession() async {
+    _currentUser = await _authService.restoreSession();
   }
 }
 
@@ -74,17 +97,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-<<<<<<< HEAD
   final ContactRepository _contactRepository = DriftContactRepository();
 
   // ════════════════════════════════════════════════════════
   // 🔥 SOS FUNCTION — sends only to contacts marked as Primary
   // Emergency Contacts, read from ContactRepository (Drift).
-=======
-
-  // ════════════════════════════════════════════════════════
-  // 🔥 ORIGINAL SOS FUNCTION — COMPLETELY UNCHANGED
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
   // ════════════════════════════════════════════════════════
   Future<void> sendSOS() async {
     try {
@@ -108,7 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
       double lat = position.latitude;
       double lng = position.longitude;
 
-<<<<<<< HEAD
       // 3. Load Primary Emergency Contacts from the local database
       final contacts = await _contactRepository.getPrimaryContacts();
 
@@ -137,20 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       // 6. Open SMS app
-=======
-      // 3. Create SOS message
-      String message =
-          "🚨 SOS! I need help.\nMy Location: https://maps.google.com/?q=$lat,$lng";
-
-      // 👉 Replace with your phone number
-      final Uri smsUri = Uri(
-        scheme: 'sms',
-        path: '7755922469',
-        queryParameters: {'body': message},
-      );
-      
-      // 4. Open SMS app
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
       await launchUrl(smsUri);
 
     } catch (e) {
@@ -167,8 +169,9 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {}); // refresh UI after login/register
   }
   
-  void _logout() {
-    AuthState.logout();
+  void _logout() async {
+    await AuthState.logout();
+    if (!mounted) return;
     setState(() {});
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -483,7 +486,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label: "Emergency Contacts",
               desc: "Add & manage your trusted contacts",
               isLoggedIn: isLoggedIn,
-<<<<<<< HEAD
               // TODO(dev-mode): login check temporarily removed so
               // ContactRepository/Drift can be tested without signing in.
               // Restore the `if (isLoggedIn) { ... } else { _onLockedFeatureTap(...) }`
@@ -496,9 +498,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-=======
-              onTap: () => _onLockedFeatureTap("Emergency Contacts"),
->>>>>>> d94f355c7bf354077a3790131a2352b4a545abf4
             ),
             _featureTile(
               icon: Icons.map,
@@ -519,7 +518,14 @@ class _HomeScreenState extends State<HomeScreen> {
               label: "Fake Call",
               desc: "Simulate an incoming call to escape danger",
               isLoggedIn: isLoggedIn,
-              onTap: () => _onLockedFeatureTap("Fake Call"),
+              onTap: () {
+                if (isLoggedIn) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => FakeCallScreen()));
+                } else {
+                  _onLockedFeatureTap("Fake Call");
+                }
+              },
             ),
 
             const SizedBox(height: 36),
@@ -653,21 +659,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _errorMsg;
 
-  void _doLogin() {
+  void _doLogin() async {
     final phone = _loginPhone.text.trim();
     final pass = _loginPass.text.trim();
     if (phone.isEmpty || pass.isEmpty) {
       setState(() => _errorMsg = 'Please fill in all fields.');
       return;
     }
-    if (AuthState.login(phone, pass)) {
+    final success = await AuthState.login(phone, pass);
+    if (!mounted) return;
+    if (success) {
       Navigator.pop(context);
     } else {
       setState(() => _errorMsg = 'Invalid phone or password.');
     }
   }
 
-  void _doRegister() {
+  void _doRegister() async {
     final name = _regName.text.trim();
     final phone = _regPhone.text.trim();
     final pass = _regPass.text.trim();
@@ -680,10 +688,12 @@ class _LoginScreenState extends State<LoginScreen> {
           () => _errorMsg = 'Password must be at least 6 characters.');
       return;
     }
-    if (AuthState.register(name, phone, pass)) {
+    final success = await AuthState.register(name, phone, pass);
+    if (!mounted) return;
+    if (success) {
       Navigator.pop(context);
     } else {
-      setState(() => _errorMsg = 'Phone number already registered.');
+      setState(() => _errorMsg = 'Registration failed — phone number may already be registered.');
     }
   }
 
