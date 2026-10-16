@@ -44,7 +44,7 @@ export const CodeBlock = memo(function CodeBlock({ code, lang = 'c', title, high
         <code>
           {lines.map((tokens, i) => (
             <span key={i} className={`code-line ${hl.has(i) ? 'bg-accent/15' : ''}`}>
-              {showLineNumbers && <span className="inline-block w-10 select-none pr-3 text-right text-muted/60">{startLine + i}</span>}
+              {showLineNumbers && <span className="inline-block w-10 select-none pr-3 text-right text-muted">{startLine + i}</span>}
               {tokens.map((t, j) => (
                 <span key={j} className={'cls' in t && t.cls ? `tok-${t.cls}` : undefined}>
                   {t.text}

@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import type { TreeNode } from '../../features/avl';
+import { ScrollRegion } from '../common/ui';
 import { computeLayout } from './layout';
 
 /** Table of height / subtree heights / balance factor for every node (sorted by key). */
-export function BalanceTable({ root, flagged = [] }: { root: TreeNode | null; flagged?: number[] }) {
+export function BalanceTable({ root, flagged = [], label = 'Balance factor table' }: { root: TreeNode | null; flagged?: number[]; label?: string }) {
   const rows = useMemo(() => computeLayout(root).nodes.slice().sort((a, b) => a.key - b.key), [root]);
   if (!rows.length) return null;
   return (
-    <div className="overflow-x-auto">
+    <ScrollRegion label={label}>
       <table className="table-lab" aria-label="Heights and balance factors">
         <thead>
           <tr>
@@ -38,6 +39,6 @@ export function BalanceTable({ root, flagged = [] }: { root: TreeNode | null; fl
           })}
         </tbody>
       </table>
-    </div>
+    </ScrollRegion>
   );
 }

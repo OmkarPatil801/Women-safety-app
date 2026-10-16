@@ -106,7 +106,7 @@ export function CodeViewer({ initialLang }: { initialLang: Lang }) {
         }}
         className={`code-line ${i === currentMatchLine ? 'bg-warn/15' : ''}`}
       >
-        <span className="inline-block w-12 select-none pr-3 text-right text-muted/60">{i + 1}</span>
+        <span className="inline-block w-12 select-none pr-3 text-right text-muted">{i + 1}</span>
         {content}
         {toks.length === 0 && ' '}
       </span>
@@ -221,7 +221,7 @@ export function CodeViewer({ initialLang }: { initialLang: Lang }) {
               <code>
                 {segments.map((seg, si) => (
                   <span key={si} className="block">
-                    {si > 0 && <span className="code-line select-none text-muted/60">{'      ⋯'}</span>}
+                    {si > 0 && <span className="code-line select-none text-muted">{'      ⋯'}</span>}
                     {Array.from({ length: seg.range.end - seg.range.start + 1 }, (_, k) => renderLine(seg.range.start + k))}
                   </span>
                 ))}

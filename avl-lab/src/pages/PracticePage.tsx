@@ -206,7 +206,7 @@ function Menu({
           const right = qs.filter((q) => data.quiz[q.id]?.correct).length;
           return (
             <div key={l.id} className="card card-pad flex flex-col">
-              <h3>{l.label}</h3>
+              <h2 className="text-lg">{l.label}</h2>
               <p className="mt-1 flex-1 text-sm text-muted">{l.blurb}</p>
               <p className="my-3 text-xs text-muted">
                 {qs.length} questions · {tried} tried · {right} correct

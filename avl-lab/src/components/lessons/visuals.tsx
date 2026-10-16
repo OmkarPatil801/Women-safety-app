@@ -33,7 +33,7 @@ export function InsertionStepper({ keys, mode, caption }: { keys: number[]; mode
         <p className="text-sm text-muted" aria-live="polite">
           Inserted so far:{' '}
           {keys.map((k, idx) => (
-            <span key={k} className={`mx-0.5 rounded px-1.5 py-0.5 font-mono ${idx === i ? 'bg-accent text-[rgb(9_14_27)]' : idx < i ? 'bg-raised text-ink' : 'text-muted/60'}`}>
+            <span key={k} className={`mx-0.5 rounded px-1.5 py-0.5 font-mono ${idx === i ? 'bg-accent text-[rgb(var(--c-on-accent))]' : idx < i ? 'bg-raised text-ink' : 'text-muted'}`}>
               {k}
             </span>
           ))}

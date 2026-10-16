@@ -374,6 +374,11 @@ export function TreeCanvas({
           </button>
         </div>
       )}
+      {interactive && layout.nodes.length > 0 && view.k < 0.4 && (
+        <div className="pointer-events-none absolute left-3 top-2 rounded-lg border border-line bg-surface/90 px-2.5 py-1 text-[11px] text-muted" role="note">
+          Large tree: scroll to zoom in, drag to pan.
+        </div>
+      )}
       {interactive && layout.nodes.length > 0 && (
         <div className="pointer-events-none absolute bottom-2 left-3 hidden text-[11px] text-muted sm:block">
           drag to pan · scroll to zoom · {Math.round(view.k * 100)}%

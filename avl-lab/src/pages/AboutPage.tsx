@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Breadcrumbs, Callout, PageHeader } from '../components/common/ui';
+import { Breadcrumbs, Callout, PageHeader, ScrollRegion } from '../components/common/ui';
 
 const TECH = [
   ['React 18 + TypeScript', 'UI components and strictly typed engine'],
@@ -50,7 +50,7 @@ export default function AboutPage() {
 
       <section className="space-y-3">
         <h2>Technologies used</h2>
-        <div className="card overflow-x-auto">
+        <ScrollRegion label="Technologies used (table)" className="card">
           <table className="table-lab">
             <tbody>
               {TECH.map(([n, d]) => (
@@ -61,7 +61,7 @@ export default function AboutPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
         <p className="text-sm text-muted">There is no backend, database, account system or external service: everything runs in your browser.</p>
       </section>
 

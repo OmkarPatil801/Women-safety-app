@@ -1,3 +1,4 @@
+import { ScrollRegion } from '../common/ui';
 import { useMemo, useState } from 'react';
 import { buildMinimalAvl, heightCurves, minNodesForHeight } from '../../features/avl';
 import { TreeFigure } from '../tree/TreeFigure';
@@ -99,7 +100,7 @@ export function FibonacciExplorer() {
 export function MinNodesTable() {
   const rows = Array.from({ length: 10 }, (_, i) => i + 1);
   return (
-    <div className="card overflow-x-auto">
+    <ScrollRegion label="Minimum nodes per AVL height (table)" className="card">
       <table className="table-lab" aria-label="Minimum nodes per AVL height">
         <thead>
           <tr>
@@ -120,6 +121,6 @@ export function MinNodesTable() {
           ))}
         </tbody>
       </table>
-    </div>
+    </ScrollRegion>
   );
 }

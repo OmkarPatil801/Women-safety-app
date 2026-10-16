@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Breadcrumbs, Callout, PageHeader } from '../components/common/ui';
+import { Breadcrumbs, Callout, PageHeader, ScrollRegion } from '../components/common/ui';
 import { FibonacciExplorer, HeightChart, HeightExplorer, MinNodesTable } from '../components/lessons/ComplexityVisuals';
 
 export default function ComplexityPage() {
@@ -26,7 +26,7 @@ export default function ComplexityPage() {
 
       <section className="space-y-3">
         <h2>AVL tree versus ordinary BST</h2>
-        <div className="card overflow-x-auto">
+        <ScrollRegion label="AVL versus BST complexity (table)" className="card">
           <table className="table-lab" aria-label="Complexity comparison of AVL tree and ordinary BST">
             <thead>
               <tr>
@@ -36,13 +36,13 @@ export default function ComplexityPage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td>Search</td><td className="font-mono">O(log n) worst case</td><td className="font-mono">O(n) worst case</td></tr>
-              <tr><td>Insertion</td><td className="font-mono">O(log n) worst case</td><td className="font-mono">O(n) worst case</td></tr>
-              <tr><td>Deletion</td><td className="font-mono">O(log n) worst case</td><td className="font-mono">O(n) worst case</td></tr>
-              <tr><td>Space (recursion stack)</td><td className="font-mono">O(log n)</td><td className="font-mono">O(n) worst case</td></tr>
+              <tr><td>Search</td><td className="font-semibold">O(log n) worst case</td><td className="font-semibold">O(n) worst case</td></tr>
+              <tr><td>Insertion</td><td className="font-semibold">O(log n) worst case</td><td className="font-semibold">O(n) worst case</td></tr>
+              <tr><td>Deletion</td><td className="font-semibold">O(log n) worst case</td><td className="font-semibold">O(n) worst case</td></tr>
+              <tr><td>Space (recursion stack)</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(n) worst case</td></tr>
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
         <Callout kind="info" title="An ordinary BST can also be fast">
           <p>If its shape happens to be balanced (for example after random insertions) an ordinary BST also needs only O(log n) on average. The table compares the <b>worst case</b>: a plain BST gives no guarantee, an AVL tree does. The price is a little extra work per update: updating heights and occasionally rotating.</p>
         </Callout>
@@ -50,7 +50,7 @@ export default function ComplexityPage() {
 
       <section className="space-y-3">
         <h2>Best, average and worst case</h2>
-        <div className="card overflow-x-auto">
+        <ScrollRegion label="Best, average and worst case (table)" className="card">
           <table className="table-lab" aria-label="Best, average and worst case for AVL operations">
             <thead>
               <tr>
@@ -62,14 +62,14 @@ export default function ComplexityPage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td>Search</td><td className="font-mono">O(1)</td><td className="font-mono">O(log n)</td><td className="font-mono">O(log n)</td><td className="text-sm text-muted">Best case: the key is in the root. A missing key needs a full path.</td></tr>
-              <tr><td>Insertion</td><td className="font-mono">O(log n)</td><td className="font-mono">O(log n)</td><td className="font-mono">O(log n)</td><td className="text-sm text-muted">Walk down to a leaf position and back up. At most one single or double rotation.</td></tr>
-              <tr><td>Deletion</td><td className="font-mono">O(log n)</td><td className="font-mono">O(log n)</td><td className="font-mono">O(log n)</td><td className="text-sm text-muted">Search, successor walk and the way back up are each ≤ height. Up to O(log n) rotations.</td></tr>
-              <tr><td>Rotation</td><td className="font-mono">O(1)</td><td className="font-mono">O(1)</td><td className="font-mono">O(1)</td><td className="text-sm text-muted">Only a few pointers and two heights change.</td></tr>
-              <tr><td>Any traversal</td><td className="font-mono">O(n)</td><td className="font-mono">O(n)</td><td className="font-mono">O(n)</td><td className="text-sm text-muted">Every node is visited once. Stack/queue space: O(h) / O(width).</td></tr>
+              <tr><td>Search</td><td className="font-semibold">O(1)</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(log n)</td><td className="text-sm text-muted">Best case: the key is in the root. A missing key needs a full path.</td></tr>
+              <tr><td>Insertion</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(log n)</td><td className="text-sm text-muted">Walk down to a leaf position and back up. At most one single or double rotation.</td></tr>
+              <tr><td>Deletion</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(log n)</td><td className="font-semibold">O(log n)</td><td className="text-sm text-muted">Search, successor walk and the way back up are each ≤ height. Up to O(log n) rotations.</td></tr>
+              <tr><td>Rotation</td><td className="font-semibold">O(1)</td><td className="font-semibold">O(1)</td><td className="font-semibold">O(1)</td><td className="text-sm text-muted">Only a few pointers and two heights change.</td></tr>
+              <tr><td>Any traversal</td><td className="font-semibold">O(n)</td><td className="font-semibold">O(n)</td><td className="font-semibold">O(n)</td><td className="text-sm text-muted">Every node is visited once. Stack/queue space: O(h) / O(width).</td></tr>
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
       </section>
 
       <section className="space-y-4">

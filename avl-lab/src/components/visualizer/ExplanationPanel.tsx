@@ -28,12 +28,12 @@ export function ExplanationPanel({
 }) {
   const complexity = session ? COMPLEXITY[session.type] : null;
   return (
-    <div className="space-y-4">
-      <section className="card card-pad" aria-live="polite" aria-label="Operation explanation">
+    <div className="grid items-start gap-4 md:grid-cols-2 3xl:grid-cols-1">
+      <section className="card card-pad md:col-span-2 3xl:col-span-1" aria-live="polite" aria-label="Operation explanation">
         <p className="panel-title mb-2">{step ? `Step ${step.index + 1} · ${step.kind.replace('-', ' ')}` : 'Explanation'}</p>
         {step ? (
           <>
-            <h3 className="mb-1.5">{step.title}</h3>
+            <h2 className="mb-1.5 text-lg">{step.title}</h2>
             <p className="text-[15px] leading-7 text-ink/90">{step.explanation}</p>
             {step.note && <p className="mt-2 rounded-lg bg-info/10 px-3 py-2 font-mono text-xs text-ink">{step.note}</p>}
             {step.imbalance && (
@@ -90,7 +90,7 @@ export function ExplanationPanel({
           </>
         ) : (
           <>
-            <h3 className="mb-1.5">Ready</h3>
+            <h2 className="mb-1.5 text-lg">Ready</h2>
             <p className="text-[15px] leading-7 text-ink/90">
               Insert, delete or search a value and every decision the algorithm makes is explained here, step by step. Use the playback bar to pause, go back, or change the speed.
             </p>
@@ -122,7 +122,7 @@ export function ExplanationPanel({
         <section className="card card-pad" aria-label="Complexity of this operation">
           <p className="panel-title mb-2">Complexity of this operation</p>
           <p className="text-sm">
-            Time <b className="font-mono text-accent">{complexity.time}</b> · Space <b className="font-mono text-accent">{complexity.space}</b>
+            Time <b className="text-accent">{complexity.time}</b> · Space <b className="text-accent">{complexity.space}</b>
           </p>
           <p className="mt-1 text-xs text-muted">{complexity.note}</p>
         </section>

@@ -120,7 +120,7 @@ function invalidTreeQuestion(): McqQuestion {
     level: 'intermediate',
     topic: 'AVL property',
     prompt: 'Exactly one of these trees is NOT a valid AVL tree. Which one?',
-    figures: figs.map((root, i) => ({ label: `Tree ${String.fromCharCode(65 + i)}`, root })),
+    figures: figs.map((root, i) => ({ label: `Tree ${String.fromCharCode(65 + i)}`, root, hideMetrics: true })),
     options: ['Tree A', 'Tree B', 'Tree C', 'All three are valid'],
     answer,
     explanation: `The validator reports: ${validateAvl(figs[answer]).errors[0]}. In tree B the node 20 has a left subtree of height 2 and no right subtree, so its balance factor is +2 (the root 30 is at +2 as well).`,

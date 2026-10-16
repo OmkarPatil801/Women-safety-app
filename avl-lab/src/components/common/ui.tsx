@@ -29,13 +29,13 @@ export function Callout({ kind = 'info', title, children }: { kind?: CalloutKind
   const c = CALLOUT[kind];
   const Icon = c.icon;
   return (
-    <aside className={`my-4 flex gap-3 rounded-xl border p-4 ${c.cls}`}>
+    <div role="note" className={`my-4 flex gap-3 rounded-xl border p-4 ${c.cls}`}>
       <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${c.ic}`} aria-hidden />
       <div className="min-w-0 text-[15px] leading-7">
         <p className={`text-xs font-semibold uppercase tracking-wider ${c.ic}`}>{title ?? c.label}</p>
         <div className="prose-lab [&>p]:my-1">{children}</div>
       </div>
-    </aside>
+    </div>
   );
 }
 
@@ -186,7 +186,7 @@ export function Tabs<T extends string>({
           aria-selected={value === t.id}
           onClick={() => onChange(t.id)}
           className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-            value === t.id ? 'bg-accent text-[rgb(9_14_27)]' : 'text-muted hover:bg-raised hover:text-ink'
+            value === t.id ? 'bg-accent text-[rgb(var(--c-on-accent))]' : 'text-muted hover:bg-raised hover:text-ink'
           }`}
         >
           {t.icon}
@@ -222,6 +222,15 @@ export function Modal({ open, onClose, title, children }: { open: boolean; onClo
         <h3 className="mb-2">{title}</h3>
         {children}
       </div>
+    </div>
+  );
+}
+
+/** Horizontally scrollable wrapper that keyboard users can focus and scroll (each region needs its own label). */
+export function ScrollRegion({ label, className = '', children }: { label: string; className?: string; children: ReactNode }) {
+  return (
+    <div className={`overflow-x-auto ${className}`} tabIndex={0} role="region" aria-label={label}>
+      {children}
     </div>
   );
 }

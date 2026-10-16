@@ -2,7 +2,7 @@ import { Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SOURCES, type Lang } from '../../features/codeExamples/sources';
-import { Breadcrumbs, Callout, PageHeader, Tabs } from '../common/ui';
+import { Breadcrumbs, Callout, PageHeader, Tabs, ScrollRegion } from '../common/ui';
 import { CodeBlock } from './CodeBlock';
 import { CodeViewer } from './CodeViewer';
 
@@ -127,7 +127,7 @@ export function ImplementationPage({ lang }: { lang: Lang }) {
 
       <section className="space-y-4" aria-labelledby="diff">
         <h2 id="diff">C versus C++ in this project</h2>
-        <div className="card overflow-x-auto">
+        <ScrollRegion label="Differences between C and C++ (table)" className="card">
           <table className="table-lab" aria-label="Differences between the C and C++ programs">
             <thead>
               <tr>
@@ -145,7 +145,7 @@ export function ImplementationPage({ lang }: { lang: Lang }) {
               <tr><td>Input / output</td><td><code>printf</code>, <code>scanf</code>.</td><td><code>std::cout</code>, <code>std::cin</code>.</td></tr>
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
         <Callout kind="info" title="C++ does not make an AVL tree object-oriented by itself">
           <p>The balancing algorithm is identical in both languages - the recursion, the rotations and the balance-factor checks are the same. Using a class here only bundles the root pointer with the operations and lets the destructor handle cleanup; it does not change how the tree works. Both programs share the same shape on purpose so you can read them side by side.</p>
         </Callout>

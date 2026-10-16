@@ -132,14 +132,14 @@ export function RotationCaseView({ config }: { config: CaseConfig }) {
             BF = height(left) − height(right). Node {scenario.unbalancedKey} has BF {scenario.balanceFactor > 0 ? '+' : ''}
             {scenario.balanceFactor}, so its {scenario.balanceFactor > 0 ? 'left' : 'right'} side is two levels taller than the other side - that breaks the rule |BF| ≤ 1.
           </p>
-          <BalanceTable root={scenario.unbalanced} flagged={unbalancedFlag} />
+          <BalanceTable root={scenario.unbalanced} flagged={unbalancedFlag} label="Balance factors before the rotation (table)" />
         </div>
         <div className="card card-pad">
           <h3 className="mb-1">Heights and balance factors after the rotation</h3>
           <p className="mb-3 text-sm text-muted">
             After the rotation{double ? 's' : ''} the heights of the moved nodes were recalculated, and every balance factor is back inside [−1, 1].
           </p>
-          <BalanceTable root={scenario.finalTree} />
+          <BalanceTable root={scenario.finalTree} label="Balance factors after the rotation (table)" />
         </div>
       </section>
 

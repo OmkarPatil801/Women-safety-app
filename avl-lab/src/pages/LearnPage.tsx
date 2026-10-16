@@ -37,7 +37,7 @@ function LessonIndex() {
                     </span>
                   )}
                 </div>
-                <h3>{l.title}</h3>
+                <h2 className="text-lg">{l.title}</h2>
                 <p className="mt-1 text-sm text-muted">{l.summary}</p>
               </Link>
             </li>
@@ -46,7 +46,7 @@ function LessonIndex() {
         <li>
           <Link to="/rotations" className="card card-pad !text-ink block h-full border-dashed no-underline transition-colors hover:border-accent/60">
             <span className="chip chip-info mb-2">Next up</span>
-            <h3>Rotations Lab</h3>
+            <h2 className="text-lg">Rotations Lab</h2>
             <p className="mt-1 text-sm text-muted">See how LL, RR, LR and RL imbalances are repaired, step by step.</p>
           </Link>
         </li>

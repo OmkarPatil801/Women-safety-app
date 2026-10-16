@@ -11,7 +11,8 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:c": "bash scripts/test-c-cpp.sh"
+    "test:c": "bash scripts/test-c-cpp.sh",
+    "test:e2e": "node scripts/e2e.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",

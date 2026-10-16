@@ -27,7 +27,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
             <>
               <item.icon className="h-[18px] w-[18px] shrink-0" aria-hidden />
               <span className="flex-1">{item.label}</span>
-              <span className={`text-[10px] tabular-nums ${isActive ? 'text-accent' : 'text-muted/70'}`} aria-hidden>
+              <span className={`text-[10px] tabular-nums ${isActive ? 'text-accent' : 'text-muted'}`} aria-hidden>
                 {i + 1}
               </span>
               {isActive && <span className="sr-only">(current section)</span>}
@@ -92,12 +92,12 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-3 focus:py-2 focus:text-[rgb(9_14_27)]">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-3 focus:py-2 focus:text-[rgb(var(--c-on-accent))]">
         Skip to content
       </a>
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col gap-5 overflow-y-auto border-r border-line bg-surface p-4 lg:flex scroll-thin">
+      <aside aria-label="Sidebar" className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col gap-5 overflow-y-auto border-r border-line bg-surface p-4 lg:flex scroll-thin">
         <Logo />
         <NavList />
         <div className="mt-auto space-y-3">

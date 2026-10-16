@@ -2,7 +2,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RotationCaseView } from '../components/lessons/RotationCaseView';
-import { Breadcrumbs, Callout, PageHeader, Tabs } from '../components/common/ui';
+import { Breadcrumbs, Callout, PageHeader, Tabs, ScrollRegion } from '../components/common/ui';
 import { TreeFigure } from '../components/tree/TreeFigure';
 import { StepPlayer } from '../components/visualizer/StepPlayer';
 import { CASES, equalityDemo } from '../features/lessons/rotationScenarios';
@@ -54,7 +54,7 @@ export default function RotationsPage() {
         <p className="prose-lab text-[15.5px]">
           The algorithm looks at the balance factor of the unbalanced node <b>z</b> and of its <b>heavy child</b>. The same four rules are used for insertion and for deletion.
         </p>
-        <div className="card overflow-x-auto">
+        <ScrollRegion label="Rotation decision table" className="card">
           <table className="table-lab" aria-label="Rotation decision table">
             <thead>
               <tr>
@@ -71,7 +71,7 @@ export default function RotationsPage() {
               <tr><td className="font-mono">&lt; −1 (right-heavy)</td><td className="font-mono">&gt; 0</td><td><span className="chip chip-info">RL</span></td><td>Right rotation on z.right, then left rotation on z</td></tr>
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
         <Callout kind="warn" title="Why the equality cases (= 0) matter">
           <p>
             After an <b>insertion</b> the heavy child can never have BF = 0, so beginners often write <code>&gt; 0</code> / <code>&lt; 0</code> tests and never notice. After a <b>deletion</b> it can happen, and then the extra height sits under <i>both</i> of the child&apos;s subtrees. A <b>single</b> rotation is the correct fix; using the double rotation here can leave the tree unbalanced. That is why LL uses <code>≥ 0</code> and RR uses <code>≤ 0</code>.

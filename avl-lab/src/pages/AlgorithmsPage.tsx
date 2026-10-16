@@ -79,13 +79,13 @@ export default function AlgorithmsPage() {
               <p className="panel-title mb-1 flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" aria-hidden /> Time complexity
               </p>
-              <p className="font-mono text-sm text-accent">{algo.time}</p>
+              <p className="text-sm font-medium text-accent">{algo.time}</p>
             </div>
             <div className="card card-pad !p-4">
               <p className="panel-title mb-1 flex items-center gap-1.5">
                 <HardDrive className="h-3.5 w-3.5" aria-hidden /> Space complexity
               </p>
-              <p className="font-mono text-sm text-accent">{algo.space}</p>
+              <p className="text-sm font-medium text-accent">{algo.space}</p>
             </div>
           </div>
 

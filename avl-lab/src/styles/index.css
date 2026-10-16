@@ -13,6 +13,7 @@
   --c-ink: 226 232 240;
   --c-muted: 148 163 184;
   --c-accent: 56 189 248;
+  --c-on-accent: 9 14 27;
   --c-good: 52 211 153;
   --c-warn: 251 191 36;
   --c-bad: 248 113 113;
@@ -29,13 +30,14 @@
   --c-line: 203 213 225;
   --c-ink: 15 23 42;
   --c-muted: 71 85 105;
-  --c-accent: 2 118 180;
-  --c-good: 4 120 87;
-  --c-warn: 161 98 7;
+  --c-accent: 3 105 161;
+  --c-on-accent: 255 255 255;
+  --c-good: 4 108 78;
+  --c-warn: 133 77 14;
   --c-bad: 200 30 30;
   --c-info: 79 70 229;
   --tree-node: 226 232 240;
-  --tree-edge-l: 2 118 180;
+  --tree-edge-l: 3 105 161;
   --tree-edge-r: 109 40 217;
 }
 
@@ -51,6 +53,8 @@
   h2 { @apply text-2xl; }
   h3 { @apply text-lg; }
   a { @apply text-accent; }
+  /* Links inside running text must not rely on colour alone. */
+  main p a, main li a:not(.btn):not(.no-underline), main td a, main summary a { text-decoration: underline; text-underline-offset: 3px; }
   :focus-visible { outline: 2px solid rgb(var(--c-accent)); outline-offset: 2px; border-radius: 6px; }
   ::selection { background: rgb(var(--c-accent) / 0.3); }
   code, kbd, pre { @apply font-mono; }
@@ -64,16 +68,17 @@
 }
 
 @layer components {
-  .card { @apply rounded-2xl border border-line bg-surface shadow-card; }
+  .card { @apply min-w-0 rounded-2xl border border-line bg-surface shadow-card; }
   .card-pad { @apply p-5 sm:p-6; }
   .panel-title { @apply text-xs font-semibold uppercase tracking-wider text-muted; }
 
   .btn {
+    text-decoration: none;
     @apply inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-raised px-3.5 py-2 text-sm font-medium text-ink
       transition-colors hover:border-accent/60 hover:bg-raised/70 disabled:cursor-not-allowed disabled:opacity-45;
     min-height: 40px;
   }
-  .btn-primary { @apply border-transparent bg-accent text-[rgb(9_14_27)] hover:bg-accent/90 hover:border-transparent; }
+  .btn-primary { @apply border-transparent bg-accent text-[rgb(var(--c-on-accent))] hover:bg-accent/90 hover:border-transparent; }
   .btn-ghost { @apply border-transparent bg-transparent hover:bg-raised; }
   .btn-danger { @apply border-bad/50 text-bad hover:bg-bad/10 hover:border-bad; }
   .btn-sm { @apply px-2.5 py-1.5 text-xs; min-height: 32px; }
@@ -117,9 +122,9 @@
 :root[data-theme='light'] .tok-kw { color: rgb(109 40 217); }
 :root[data-theme='light'] .tok-ty { color: rgb(3 105 161); }
 :root[data-theme='light'] .tok-str { color: rgb(4 120 87); }
-:root[data-theme='light'] .tok-num { color: rgb(161 98 7); }
-:root[data-theme='light'] .tok-cm { color: rgb(100 116 139); }
+:root[data-theme='light'] .tok-num { color: rgb(133 77 14); }
+:root[data-theme='light'] .tok-cm { color: rgb(71 85 105); }
 :root[data-theme='light'] .tok-pp { color: rgb(190 24 93); }
-:root[data-theme='light'] .tok-fn { color: rgb(161 98 7); }
+:root[data-theme='light'] .tok-fn { color: rgb(133 77 14); }
 
 .scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--c-line)) transparent; }

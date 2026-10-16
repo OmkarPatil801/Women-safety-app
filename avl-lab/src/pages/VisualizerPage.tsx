@@ -71,8 +71,8 @@ export default function VisualizerPage() {
         A real AVL tree runs behind this canvas. Every step you see was recorded by the algorithm, so you can pause, step backwards and inspect any node.
       </PageHeader>
 
-      <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[290px_minmax(0,1fr)_350px]">
-        <aside className="card card-pad order-1 lg:row-span-2 xl:row-span-1" aria-label="Controls">
+      <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] 3xl:grid-cols-[290px_minmax(0,1fr)_360px]">
+        <aside className="card card-pad order-1 self-start lg:row-span-2 3xl:row-span-1" aria-label="Controls">
           <ControlsPanel viz={viz} />
         </aside>
 
@@ -116,7 +116,7 @@ export default function VisualizerPage() {
           <TreeLegend />
         </section>
 
-        <aside className="order-3 min-w-0 lg:col-start-2 xl:col-start-3" aria-label="Explanation">
+        <aside className="order-3 min-w-0 lg:col-start-2 3xl:col-start-3 3xl:row-start-1" aria-label="Explanation">
           <ExplanationPanel
             step={viz.step}
             session={viz.session}
